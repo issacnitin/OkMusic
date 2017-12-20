@@ -1,5 +1,6 @@
 package com.beerwithai.newscatcher;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,26 @@ public class NavigationActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Thread welcomeThread = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    android.support.v4.app.Fragment mFragment = null;
+                    mFragment = new SplashScreen();
+                    android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, mFragment).commit();
+                } catch (Exception e) {
+
+                } finally {
+
+                }
+            }
+        };
+        welcomeThread.start();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -32,6 +53,7 @@ public class NavigationActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -70,24 +92,32 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
-        if (id == R.id.swip_music) {
+        Thread welcomeThread = new Thread() {
 
-            android.support.v4.app.Fragment mFragment = null;
-            mFragment = new SwipeMusic();
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frameLayout, mFragment).commit();
-        } else if (id == R.id.favorite_music) {
+            @Override
+            public void run() {
+                try {
+                    android.support.v4.app.Fragment mFragment = null;
+                    if (id == R.id.swip_music) {
+                        mFragment = new SwipeMusic();
+                    } else if (id == R.id.favorite_music) {
+                        mFragment = new FavoriteNews();
+                    } else if(id == R.id.search_music) {
+                        mFragment = new SearchMusic();
+                    }
+                    android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, mFragment).commit();
+                } catch (Exception e) {
 
-        } else if(id == R.id.search_music) {
-            android.support.v4.app.Fragment mFragment = null;
-            mFragment = new SearchMusic();
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frameLayout, mFragment).commit();
-        }
+                } finally {
+
+                }
+            }
+        };
+        welcomeThread.start();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -15,12 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.beerwithai.newscatcher.R;
 
 import org.w3c.dom.Text;
+
+import java.net.URL;
 
 public class SearchMusic extends android.support.v4.app.Fragment {
 
@@ -30,8 +33,6 @@ public class SearchMusic extends android.support.v4.app.Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    MediaPlayer mp = new MediaPlayer();
-    boolean musicPlaying = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,16 +51,10 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        Bitmap[] bmp = new Bitmap[2];
-        String[] titles = new String[2];
-        titles[0] = "abc";
-        titles[1] = "def";
-        String[] artists = new String[2];
-        artists[0] = "Shah";
-        artists[1] = "Blah";
-        String[] urls = new String[2];
-        urls[0] = "http://www.google.com";
-        urls[1] = "http://www.amazon.in";
+        Bitmap[] bmp = SwipeMusic.coverImageArray;
+        String[] titles = SwipeMusic.titleStringArray;
+        String[] artists = SwipeMusic.artistListArray;
+        URL[] urls = SwipeMusic.urlStringArray;
 
         // specify an adapter (see also next example)
         mAdapter = new SongsAdapter(bmp, titles, artists, urls);
@@ -70,9 +65,10 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         return view;
     }
 
-    public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
+    public static class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
         private Bitmap[] coverImages;
-        private String[] titles, artists, urls;
+        private String[] titles, artists;
+        private URL[] urls;
 
 
         // Provide a reference to the views for each data item
@@ -82,19 +78,19 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             // each data item is just a string in this case
             public TextView artist, title;
             public ImageView cover;
-            public ImageButton play;
+            public LinearLayout layout;
 
             public ViewHolder(View v) {
                 super(v);
                 artist = (TextView) v.findViewById(R.id.artists_rec);
                 title = (TextView) v.findViewById(R.id.title_rec);
                 cover = (ImageView) v.findViewById(R.id.coverImageSmall);
-                play = (ImageButton) v.findViewById(R.id.playButtonSmall);
+                layout = (LinearLayout) v.findViewById(R.id.chummaoruid);
             }
         }
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public SongsAdapter(Bitmap[] coverImages, String[] titles, String[] artists, String[] urls) {
+        public SongsAdapter(Bitmap[] coverImages, String[] titles, String[] artists, URL[] urls) {
             this.coverImages = coverImages;
             this.titles = titles;
             this.artists = artists;
@@ -120,23 +116,64 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             holder.title.setText(titles[position]);
             holder.artist.setText(artists[position]);
             holder.cover.setImageBitmap(coverImages[position]);
-            holder.play.setOnClickListener(new View.OnClickListener() {
+
+            holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(musicPlaying)
-                        mp.stop();
+                    if(SwipeMusic.musicPlaying)
+                        SwipeMusic.mp.stop();
                     else {
                         try {
-                            String dataSource = urls[position];
-                            mp.setDataSource(dataSource);
-                            mp.prepare();
+                            String dataSource = urls[position].toString();
+                            SwipeMusic.mp.setDataSource(dataSource);
+                            SwipeMusic.mp.prepare();
                         } catch (Exception e) {
                             System.out.println(e);
                         }
-                        mp.start();
+                        SwipeMusic.mp.start();
                     }
 
-                    musicPlaying = !musicPlaying;
+                    SwipeMusic.musicPlaying = !SwipeMusic.musicPlaying;
+                }
+            });
+
+            holder.artist.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(SwipeMusic.musicPlaying)
+                        SwipeMusic.mp.stop();
+                    else {
+                        try {
+                            String dataSource = urls[position].toString();
+                            SwipeMusic.mp.setDataSource(dataSource);
+                            SwipeMusic.mp.prepare();
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                        SwipeMusic.mp.start();
+                    }
+
+                    SwipeMusic.musicPlaying = !SwipeMusic.musicPlaying;
+                }
+            });
+
+            holder.cover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(SwipeMusic.musicPlaying)
+                        SwipeMusic.mp.stop();
+                    else {
+                        try {
+                            String dataSource = urls[position].toString();
+                            SwipeMusic.mp.setDataSource(dataSource);
+                            SwipeMusic.mp.prepare();
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                        SwipeMusic.mp.start();
+                    }
+
+                    SwipeMusic.musicPlaying = !SwipeMusic.musicPlaying;
                 }
             });
         }
@@ -144,7 +181,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
-            return coverImages.length;
+            return titles.length;
         }
     }
 

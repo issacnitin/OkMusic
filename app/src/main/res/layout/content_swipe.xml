@@ -27,9 +27,11 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom|center"
-            android:layout_margin="@dimen/fab_margin"/>
+            android:layout_margin="@dimen/fab_margin"
+            swipedeck:backgroundTint="@color/colorPrimary"
+            swipedeck:srcCompat="@drawable/icons8_circled_play_50" />
 
 
         <com.daprlabs.aaron.swipedeck.SwipeDeck

@@ -2,6 +2,7 @@ package com.beerwithai.newscatcher.CardView;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -37,6 +38,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class SwipeMusic extends android.support.v4.app.Fragment {
 
     com.beerwithai.newscatcher.SwipeDeckAdapter swAdapter;
@@ -47,14 +50,17 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
     ArrayList<String> titleTexts=new ArrayList<String>(), artistList = new ArrayList<String>();
     ArrayList<URL> urlTexts = new ArrayList<URL>();
     ArrayList<Bitmap> coverImages = new ArrayList<Bitmap>();
-    MediaPlayer mp = new MediaPlayer();
-    boolean musicPlaying = false;
+    static MediaPlayer mp = new MediaPlayer();
+    static boolean musicPlaying = false;
     SwipeDeck cardStack;
 
-    String[] titleStringArray, artistListArray;
-    URL[] urlStringArray;
-    Bitmap[] coverImageArray;
+    public static String[] titleStringArray, artistListArray;
+    public static URL[] urlStringArray;
+    public static Bitmap[] coverImageArray;
     private View view;
+
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
@@ -72,17 +78,22 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
         return resizedBitmap;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public void loadMusic() {
         String url="http://starlord.hackerearth.com/studio";
         try {
-            JSONArray t = new AsyncTaskRunner().execute(url).get();
+            //if(titleStringArray == null || titleStringArray.length == 0)
+                new AsyncTaskRunner().execute(url).get();
         } catch(Exception e) {
 
         }
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        loadMusic();
+        settings = getActivity().getSharedPreferences("favorite_music", MODE_PRIVATE);
+        editor = settings.edit();
         if(view == null) {
             view = inflater.inflate(R.layout.content_swipe, container, false);
         }
@@ -90,9 +101,10 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(musicPlaying)
+                if(musicPlaying) {
                     mp.stop();
-                else {
+                } else {
+                    mp = new MediaPlayer();
                     try {
                         String dataSource = urlStringArray[(int) cardStack.getAdapterIndex()].toString();
                         mp.setDataSource(dataSource);
@@ -127,9 +139,10 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
             }
 
             @Override
-            public void cardSwipedRight(long positoinInAdapter) {
-                Log.i("NavigationActivity", "card was swiped right, position in adapter: " + positoinInAdapter);
-
+            public void cardSwipedRight(long positionInAdapter) {
+                Log.i("NavigationActivity", "card was swiped right, position in adapter: " + positionInAdapter);
+                editor.putLong(String.valueOf(positionInAdapter), positionInAdapter);
+                editor.commit();
             }
 
 
@@ -164,26 +177,27 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
                     JSONObject jsonobject = jsonArray.getJSONObject(i);
                     String title = jsonobject.getString("song");
                     String artist = jsonobject.getString("artists");
-                    URL musicUrl = new URL(jsonobject.getString("url"));
-                    URL coverURL = new URL(jsonobject.getString("cover_image"));
-
+                    final URL musicUrl = new URL(jsonobject.getString("url"));
+                    final URL coverURL = new URL(jsonobject.getString("cover_image"));
+                    final HttpURLConnection ucon = (HttpURLConnection) coverURL.openConnection();
                     titleTexts.add(title);
+                    artistList.add(artist);
 
-                    HttpURLConnection ucon = (HttpURLConnection) coverURL.openConnection();
                     ucon.setInstanceFollowRedirects(false);
                     URL secondURL = new URL(ucon.getHeaderField("Location"));
-
                     Bitmap bmp = BitmapFactory.decodeStream(secondURL.openConnection().getInputStream());
 
                     coverImages.add(getResizedBitmap(bmp, 400, 300));
                     ucon.disconnect();
 
-                    ucon = (HttpURLConnection) musicUrl.openConnection();
-                    ucon.setInstanceFollowRedirects(false);
-                    URL musicActualURL = new URL(ucon.getHeaderField("Location"));
 
+                    final HttpURLConnection ucon2 = (HttpURLConnection) musicUrl.openConnection();
+
+                    ucon2.setInstanceFollowRedirects(false);
+                    URL musicActualURL = new URL(ucon2.getHeaderField("Location"));
                     urlTexts.add(musicActualURL);
-                    artistList.add(artist);
+                    ucon2.disconnect();
+
 
                 }
             }catch(Exception e) {
