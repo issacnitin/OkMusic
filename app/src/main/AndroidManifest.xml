@@ -23,14 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.beerwithai.okmusic.FavoriteNews"
-            android:label="@string/title_activity_favorite_news"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.beerwithai.okmusic.CardView.SearchMusic"
-            android:label="@string/title_activity_search_music"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
