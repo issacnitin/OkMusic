@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FavoriteNews extends android.support.v4.app.Fragment {
+public class FavoriteMusic extends android.support.v4.app.Fragment {
 
     SharedPreferences settings;
     View view;

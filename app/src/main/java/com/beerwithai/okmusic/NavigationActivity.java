@@ -118,7 +118,7 @@ public class NavigationActivity extends AppCompatActivity
                     if (id == R.id.swip_music) {
                         mFragment = new SwipeMusic();
                     } else if (id == R.id.favorite_music) {
-                        mFragment = new FavoriteNews();
+                        mFragment = new FavoriteMusic();
                     } else if (id == R.id.search_music) {
                         mFragment = new SearchMusic();
                     }

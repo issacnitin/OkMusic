@@ -65,7 +65,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
                 String text = searchBar.getEditText().getText().toString();
                 mAdapter.reset();
                 for(int i = 0; i < titles.length; i++) {
-                    if(!(Pattern.compile(Pattern.quote(titles[i]), Pattern.CASE_INSENSITIVE).matcher(text).find() || Pattern.compile(Pattern.quote(artists[i]), Pattern.CASE_INSENSITIVE).matcher(text).find()))
+                    if(!(Pattern.compile(Pattern.quote(text), Pattern.CASE_INSENSITIVE).matcher(titles[i]).find() || Pattern.compile(Pattern.quote(text), Pattern.CASE_INSENSITIVE).matcher(artists[i]).find()))
                         mAdapter.hide(i);
                 }
                 mAdapter.notifyDataSetChanged();
