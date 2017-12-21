@@ -9,19 +9,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="swipe left" />
+            android:layout_margin="@dimen/fab_margin"
+            swipedeck:backgroundTint="@android:color/holo_orange_light"
+            swipedeck:srcCompat="@drawable/cancel" />
 
-        <Button
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:text="swipe right" />
+            android:layout_margin="@dimen/fab_margin"
+            swipedeck:backgroundTint="@android:color/holo_orange_light"
+            swipedeck:srcCompat="@drawable/star" />
 
 
         <android.support.design.widget.FloatingActionButton

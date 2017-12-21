@@ -41,7 +41,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
     static MediaPlayer mp = new MediaPlayer();
     static boolean musicPlaying = false;
     SwipeDeckAdapter swAdapter;
-    Button btn, btn2;
+    FloatingActionButton btn, btn2;
     JSONArray jsonArray;
     ArrayList<String> titleTexts = new ArrayList<String>(), artistList = new ArrayList<String>();
     ArrayList<URL> urlTexts = new ArrayList<URL>();
@@ -50,6 +50,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     private View view;
+    private static int cardPos = 0;
 
     public static boolean isInternetAvailable() {
         try {
@@ -129,6 +130,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
         if (view == null) {
             view = inflater.inflate(R.layout.content_swipe, container, false);
         }
+        cardStack = (SwipeDeck) view.findViewById(R.id.swipe_deck);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +140,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
                 } else {
                     mp = new MediaPlayer();
                     try {
-                        String dataSource = urlStringArray[(int) cardStack.getAdapterIndex()].toString();
+                        String dataSource = urlStringArray[cardPos].toString();
                         mp.setDataSource(dataSource);
                         mp.prepare();
                     } catch (Exception e) {
@@ -150,7 +152,6 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
                 musicPlaying = !musicPlaying;
             }
         });
-        cardStack = (SwipeDeck) view.findViewById(R.id.swipe_deck);
         // Inflate the layout for this fragment
 
 
@@ -166,12 +167,13 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
             @Override
             public void cardSwipedLeft(long positionInAdapter) {
                 Log.i("NavigationActivity", "card was swiped left, position in adapter: " + positionInAdapter);
-
+                SwipeMusic.cardPos = (int) positionInAdapter;
             }
 
             @Override
             public void cardSwipedRight(long positionInAdapter) {
                 Log.i("NavigationActivity", "card was swiped right, position in adapter: " + positionInAdapter);
+                SwipeMusic.cardPos = (int) positionInAdapter;
                 editor.putLong(String.valueOf(positionInAdapter), positionInAdapter);
                 editor.commit();
             }
@@ -179,7 +181,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
 
         });
 
-        btn = (Button) view.findViewById(R.id.button);
+        btn = (FloatingActionButton) view.findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,7 +189,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
             }
         });
 
-        btn2 = (Button) view.findViewById(R.id.button2);
+        btn2 = (FloatingActionButton) view.findViewById(R.id.button2);
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
