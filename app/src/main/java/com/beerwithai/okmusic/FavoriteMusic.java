@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.beerwithai.okmusic.CardView.Constants;
 import com.beerwithai.okmusic.CardView.SearchMusic;
 import com.beerwithai.okmusic.CardView.SwipeMusic;
 
@@ -57,10 +58,10 @@ public class FavoriteMusic extends android.support.v4.app.Fragment {
         Map<String, ?> keys = settings.getAll();
 
         for (Map.Entry<String, ?> entry : keys.entrySet()) {
-            titles.add(SwipeMusic.titleStringArray[Integer.valueOf(entry.getKey())]);
-            covers.add(SwipeMusic.coverImageArray[Integer.valueOf(entry.getKey())]);
-            urls.add(SwipeMusic.urlStringArray[Integer.valueOf(entry.getKey())]);
-            artists.add(SwipeMusic.artistListArray[Integer.valueOf(entry.getKey())]);
+            titles.add(Constants.titleStringArray[Integer.valueOf(entry.getKey())]);
+            covers.add(Constants.coverImageArray[Integer.valueOf(entry.getKey())]);
+            urls.add(Constants.urlStringArray[Integer.valueOf(entry.getKey())]);
+            artists.add(Constants.artistListArray[Integer.valueOf(entry.getKey())]);
         }
 
         String[] titlesArr = titles.toArray(new String[titles.size()]);

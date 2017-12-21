@@ -47,10 +47,10 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        Bitmap[] bmp = SwipeMusic.coverImageArray;
-        final String[] titles = SwipeMusic.titleStringArray;
-        final String[] artists = SwipeMusic.artistListArray;
-        URL[] urls = SwipeMusic.urlStringArray;
+        Bitmap[] bmp = Constants.coverImageArray;
+        final String[] titles = Constants.titleStringArray;
+        final String[] artists = Constants.artistListArray;
+        URL[] urls = Constants.urlStringArray;
 
         // specify an adapter (see also next example)
         mAdapter = new SongsAdapter(bmp, titles, artists, urls);
@@ -81,7 +81,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         private String[] titles, artists;
         private URL[] urls;
         private boolean[] hidden;
-
+        private int oldPos = -1;
         // Provide a suitable constructor (depends on the kind of dataset)
         public SongsAdapter(Bitmap[] coverImages, String[] titles, String[] artists, URL[] urls) {
             this.coverImages = coverImages;
@@ -114,15 +114,9 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         public void onBindViewHolder(ViewHolder holder, final int position) {
 
             if(hidden[position]) {
-                holder.playButton.setVisibility(View.INVISIBLE);
-                holder.title.setVisibility(View.INVISIBLE);
-                holder.artist.setVisibility(View.INVISIBLE);
-                holder.cover.setVisibility(View.INVISIBLE);
+                holder.setVisibility(false);
             } else {
-                holder.playButton.setVisibility(View.VISIBLE);
-                holder.title.setVisibility(View.VISIBLE);
-                holder.artist.setVisibility(View.VISIBLE);
-                holder.cover.setVisibility(View.VISIBLE);
+                holder.setVisibility(true);
             }
 
             holder.title.setText(titles[position]);
@@ -132,22 +126,26 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             holder.playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SwipeMusic.musicPlaying) {
-                        SwipeMusic.mp.stop();
-                        SwipeMusic.mp = null;
-                    } else {
+                    if (Constants.musicPlaying) {
+                        Constants.mp.stop();
+                        Constants.mp = null;
+                        Constants.musicPlaying = false;
+                    }
+
+                    if(oldPos != position) {
                         try {
-                            SwipeMusic.mp = new MediaPlayer();
+                            Constants.mp = new MediaPlayer();
                             String dataSource = urls[position].toString();
-                            SwipeMusic.mp.setDataSource(dataSource);
-                            SwipeMusic.mp.prepare();
+                            Constants.mp.setDataSource(dataSource);
+                            Constants.mp.prepare();
                         } catch (Exception e) {
                             System.out.println(e);
                         }
-                        SwipeMusic.mp.start();
+                        Constants.mp.start();
+                        Constants.musicPlaying = true;
                     }
 
-                    SwipeMusic.musicPlaying = !SwipeMusic.musicPlaying;
+                    oldPos = position;
                 }
             });
 
@@ -176,6 +174,20 @@ public class SearchMusic extends android.support.v4.app.Fragment {
                 cover = (ImageView) v.findViewById(R.id.coverImageSmall);
                 layout = (LinearLayout) v.findViewById(R.id.chummaoruid);
                 playButton = (ImageButton) v.findViewById(R.id.playButton);
+            }
+
+            public void setVisibility(boolean isVisible){
+                RecyclerView.LayoutParams param = (RecyclerView.LayoutParams)itemView.getLayoutParams();
+                if (isVisible){
+                    param.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    param.width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    itemView.setVisibility(View.VISIBLE);
+                }else{
+                    itemView.setVisibility(View.GONE);
+                    param.height = 0;
+                    param.width = 0;
+                }
+                itemView.setLayoutParams(param);
             }
         }
     }

@@ -35,22 +35,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SwipeMusic extends android.support.v4.app.Fragment {
 
-    public static String[] titleStringArray, artistListArray;
-    public static URL[] urlStringArray;
-    public static Bitmap[] coverImageArray;
-    static MediaPlayer mp = new MediaPlayer();
-    static boolean musicPlaying = false;
     SwipeDeckAdapter swAdapter;
     FloatingActionButton btn, btn2;
     JSONArray jsonArray;
-    ArrayList<String> titleTexts = new ArrayList<String>(), artistList = new ArrayList<String>();
-    ArrayList<URL> urlTexts = new ArrayList<URL>();
-    ArrayList<Bitmap> coverImages = new ArrayList<Bitmap>();
     SwipeDeck cardStack;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     private View view;
-    private static int cardPos = 0;
+    private static int cardPos = 0, oldCardPos = -1;
 
     public static boolean isInternetAvailable() {
         try {
@@ -135,32 +127,37 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (musicPlaying) {
-                    mp.stop();
-                } else {
-                    mp = new MediaPlayer();
+                if (Constants.musicPlaying) {
+                    Constants.mp.stop();
+                    Constants.mp = null;
+                    Constants.musicPlaying = false;
+                }
+
+                if(cardPos != oldCardPos){
+                    Constants.mp = new MediaPlayer();
                     try {
-                        String dataSource = urlStringArray[cardPos].toString();
-                        mp.setDataSource(dataSource);
-                        mp.prepare();
+                        String dataSource = Constants.urlStringArray[cardPos].toString();
+                        Constants.mp.setDataSource(dataSource);
+                        Constants.mp.prepare();
                     } catch (Exception e) {
                         System.out.println(e);
                     }
-                    mp.start();
+                    Constants.mp.start();
+                    Constants.musicPlaying = true;
                 }
 
-                musicPlaying = !musicPlaying;
+                oldCardPos = cardPos;
             }
         });
         // Inflate the layout for this fragment
 
 
-        titleStringArray = titleTexts.toArray(new String[titleTexts.size()]);
-        urlStringArray = urlTexts.toArray(new URL[urlTexts.size()]);
-        coverImageArray = coverImages.toArray(new Bitmap[coverImages.size()]);
-        artistListArray = artistList.toArray(new String[artistList.size()]);
+        Constants.titleStringArray = Constants.titleTexts.toArray(new String[Constants.titleTexts.size()]);
+        Constants.urlStringArray = Constants.urlTexts.toArray(new URL[Constants.urlTexts.size()]);
+        Constants.coverImageArray = Constants.coverImages.toArray(new Bitmap[Constants.coverImages.size()]);
+        Constants.artistListArray = Constants.artistList.toArray(new String[Constants.artistList.size()]);
 
-        swAdapter = new SwipeDeckAdapter(titleStringArray, artistListArray, coverImageArray, urlStringArray, getContext());
+        swAdapter = new SwipeDeckAdapter(Constants.titleStringArray, Constants.artistListArray, Constants.coverImageArray, Constants.urlStringArray, getContext());
         cardStack.setAdapter(swAdapter);
         swAdapter.notifyDataSetChanged();
         cardStack.setCallback(new SwipeDeck.SwipeDeckCallback() {
@@ -213,14 +210,14 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
                     final URL musicUrl = new URL(jsonobject.getString("url"));
                     final URL coverURL = new URL(jsonobject.getString("cover_image"));
                     final HttpURLConnection ucon = (HttpURLConnection) coverURL.openConnection();
-                    titleTexts.add(title);
-                    artistList.add(artist);
+                    Constants.titleTexts.add(title);
+                    Constants.artistList.add(artist);
 
                     ucon.setInstanceFollowRedirects(false);
                     URL secondURL = new URL(ucon.getHeaderField("Location"));
                     Bitmap bmp = BitmapFactory.decodeStream(secondURL.openConnection().getInputStream());
 
-                    coverImages.add(getResizedBitmap(bmp, 400, 300));
+                    Constants.coverImages.add(getResizedBitmap(bmp, 400, 300));
                     ucon.disconnect();
 
 
@@ -228,7 +225,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
 
                     ucon2.setInstanceFollowRedirects(false);
                     URL musicActualURL = new URL(ucon2.getHeaderField("Location"));
-                    urlTexts.add(musicActualURL);
+                    Constants.urlTexts.add(musicActualURL);
                     ucon2.disconnect();
 
 
