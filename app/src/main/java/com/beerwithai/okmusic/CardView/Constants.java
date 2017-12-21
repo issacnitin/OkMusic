@@ -21,4 +21,7 @@ public class Constants {
     public static String[] titleStringArray, artistListArray;
     public static URL[] urlStringArray;
     public static Bitmap[] coverImageArray;
+
+
+    public static android.support.v4.app.Fragment mFragment = null;
 }

@@ -44,6 +44,21 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
     private View view;
     private static int cardPos = 0, oldCardPos = -1;
 
+    public SwipeMusic() {
+
+        Constants.titleTexts = new ArrayList<String>();
+        Constants.artistList = new ArrayList<String>();
+        Constants.urlTexts = new ArrayList<URL>();
+        Constants.coverImages = new ArrayList<Bitmap>();
+
+        Constants.titleStringArray = null;
+        Constants.artistListArray = null;
+
+        Constants.urlStringArray = null;
+        Constants.coverImageArray = null;
+
+    }
+
     public static boolean isInternetAvailable() {
         try {
             InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name

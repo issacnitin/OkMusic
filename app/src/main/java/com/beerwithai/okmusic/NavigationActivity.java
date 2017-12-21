@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.beerwithai.okmusic.CardView.Constants;
 import com.beerwithai.okmusic.CardView.SearchMusic;
 import com.beerwithai.okmusic.CardView.SwipeMusic;
 
@@ -31,22 +32,21 @@ public class NavigationActivity extends AppCompatActivity
             @Override
             public void run() {
                 try {
-
-                    android.support.v4.app.Fragment mFragment = null;
-                    mFragment = new SplashScreen();
+                    if(Constants.mFragment != null)
+                        return;
+                    Constants.mFragment = new SplashScreen();
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frameLayout, mFragment).commit();
+                            .replace(R.id.frameLayout, Constants.mFragment).commit();
                     sleep(1000);
                 } catch (Exception e) {
 
                 } finally {
                     if(SwipeMusic.isInternetAvailable()) {
-                        android.support.v4.app.Fragment mFragment = null;
-                        mFragment = new SwipeMusic();
+                        Constants.mFragment = new SwipeMusic();
                         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frameLayout, mFragment).commit();
+                                .replace(R.id.frameLayout, Constants.mFragment).commit();
                     } else {
                         ImageView internet = (ImageView) findViewById(R.id.waiticon);
                         internet.setImageDrawable(getResources().getDrawable(R.drawable.no_internet));
@@ -114,17 +114,16 @@ public class NavigationActivity extends AppCompatActivity
             @Override
             public void run() {
                 try {
-                    android.support.v4.app.Fragment mFragment = null;
                     if (id == R.id.swip_music) {
-                        mFragment = new SwipeMusic();
+                        Constants.mFragment = new SwipeMusic();
                     } else if (id == R.id.favorite_music) {
-                        mFragment = new FavoriteMusic();
+                        Constants.mFragment = new FavoriteMusic();
                     } else if (id == R.id.search_music) {
-                        mFragment = new SearchMusic();
+                        Constants.mFragment = new SearchMusic();
                     }
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frameLayout, mFragment).commit();
+                            .replace(R.id.frameLayout, Constants.mFragment).commit();
                 } catch (Exception e) {
 
                 } finally {

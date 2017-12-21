@@ -1,8 +1,12 @@
 package com.beerwithai.okmusic.CardView;
 
+import android.app.DownloadManager;
+import android.app.Service;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -192,7 +196,22 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         }
     }
 
+    private long DownloadData (Uri uri, View v, String fileName) {
 
+        long downloadReference;
+
+        // Create request for android download manager
+        DownloadManager downloadManager = (DownloadManager)getActivity().getSystemService(Service.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+
+        request.setDestinationInExternalFilesDir(getActivity(), Environment.DIRECTORY_DOWNLOADS,fileName);
+
+        //Enqueue download and save into referenceId
+        downloadReference = downloadManager.enqueue(request);
+
+        return downloadReference;
+    }
 }
 
 
