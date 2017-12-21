@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.beerwithai.newscatcher.NavigationActivity"
+    tools:context="com.beerwithai.okmusic.com.beerwithai.okmusic.NavigationActivity"
     tools:showIn="@layout/app_bar_navigation">
 
 </android.support.constraint.ConstraintLayout>

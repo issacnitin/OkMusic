@@ -1,6 +1,5 @@
-package com.beerwithai.newscatcher;
+package com.beerwithai.okmusic;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,8 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.beerwithai.newscatcher.CardView.SearchMusic;
-import com.beerwithai.newscatcher.CardView.SwipeMusic;
+import com.beerwithai.okmusic.CardView.SearchMusic;
+import com.beerwithai.okmusic.CardView.SwipeMusic;
+
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,10 +32,15 @@ public class NavigationActivity extends AppCompatActivity
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.frameLayout, mFragment).commit();
+                    sleep(1000);
                 } catch (Exception e) {
 
                 } finally {
-
+                    android.support.v4.app.Fragment mFragment = null;
+                    mFragment = new SwipeMusic();
+                    android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout, mFragment).commit();
                 }
             }
         };
@@ -104,7 +109,7 @@ public class NavigationActivity extends AppCompatActivity
                         mFragment = new SwipeMusic();
                     } else if (id == R.id.favorite_music) {
                         mFragment = new FavoriteNews();
-                    } else if(id == R.id.search_music) {
+                    } else if (id == R.id.search_music) {
                         mFragment = new SearchMusic();
                     }
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();

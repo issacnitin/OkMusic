@@ -1,7 +1,5 @@
-package com.beerwithai.newscatcher.CardView;
+package com.beerwithai.okmusic.CardView;
 
-import android.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,18 +8,13 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.beerwithai.newscatcher.NewsView;
-import com.beerwithai.newscatcher.R;
+import com.beerwithai.okmusic.R;
 import com.daprlabs.aaron.swipedeck.SwipeDeck;
 
 import org.json.JSONArray;
@@ -42,25 +35,64 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SwipeMusic extends android.support.v4.app.Fragment {
 
-    com.beerwithai.newscatcher.SwipeDeckAdapter swAdapter;
-
-    Button btn, btn2;
-
-    JSONArray jsonArray;
-    ArrayList<String> titleTexts=new ArrayList<String>(), artistList = new ArrayList<String>();
-    ArrayList<URL> urlTexts = new ArrayList<URL>();
-    ArrayList<Bitmap> coverImages = new ArrayList<Bitmap>();
-    static MediaPlayer mp = new MediaPlayer();
-    static boolean musicPlaying = false;
-    SwipeDeck cardStack;
-
     public static String[] titleStringArray, artistListArray;
     public static URL[] urlStringArray;
     public static Bitmap[] coverImageArray;
-    private View view;
-
+    static MediaPlayer mp = new MediaPlayer();
+    static boolean musicPlaying = false;
+    SwipeDeckAdapter swAdapter;
+    Button btn, btn2;
+    JSONArray jsonArray;
+    ArrayList<String> titleTexts = new ArrayList<String>(), artistList = new ArrayList<String>();
+    ArrayList<URL> urlTexts = new ArrayList<URL>();
+    ArrayList<Bitmap> coverImages = new ArrayList<Bitmap>();
+    SwipeDeck cardStack;
     SharedPreferences settings;
     SharedPreferences.Editor editor;
+    private View view;
+
+    public static boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    public static JSONArray getJSONObjectFromURL(String urlString) throws IOException, JSONException {
+
+        String jsonString = "";
+        if (isInternetAvailable()) {
+            URL url = new URL(urlString);
+            URLConnection urlConn = url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            InputStream in;
+            if (responseCode == 200) {
+                // response code is OK
+                in = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                in.close();
+                jsonString = sb.toString();
+            } else {
+                // response code is not OK
+            }
+            connection.disconnect();
+        }
+        JSONArray jsonArray = new JSONArray(jsonString);
+
+        return (jsonArray);
+    }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
@@ -79,11 +111,11 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
     }
 
     public void loadMusic() {
-        String url="http://starlord.hackerearth.com/studio";
+        String url = "http://starlord.hackerearth.com/studio";
         try {
             //if(titleStringArray == null || titleStringArray.length == 0)
-                new AsyncTaskRunner().execute(url).get();
-        } catch(Exception e) {
+            new AsyncTaskRunner().execute(url).get();
+        } catch (Exception e) {
 
         }
     }
@@ -94,14 +126,14 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
         loadMusic();
         settings = getActivity().getSharedPreferences("favorite_music", MODE_PRIVATE);
         editor = settings.edit();
-        if(view == null) {
+        if (view == null) {
             view = inflater.inflate(R.layout.content_swipe, container, false);
         }
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(musicPlaying) {
+                if (musicPlaying) {
                     mp.stop();
                 } else {
                     mp = new MediaPlayer();
@@ -122,13 +154,12 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
 
 
-
         titleStringArray = titleTexts.toArray(new String[titleTexts.size()]);
         urlStringArray = urlTexts.toArray(new URL[urlTexts.size()]);
         coverImageArray = coverImages.toArray(new Bitmap[coverImages.size()]);
         artistListArray = artistList.toArray(new String[artistList.size()]);
 
-        swAdapter = new com.beerwithai.newscatcher.SwipeDeckAdapter(titleStringArray, artistListArray, coverImageArray, urlStringArray, getContext());
+        swAdapter = new SwipeDeckAdapter(titleStringArray, artistListArray, coverImageArray, urlStringArray, getContext());
         cardStack.setAdapter(swAdapter);
         swAdapter.notifyDataSetChanged();
         cardStack.setCallback(new SwipeDeck.SwipeDeckCallback() {
@@ -200,7 +231,7 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
 
 
                 }
-            }catch(Exception e) {
+            } catch (Exception e) {
 
             }
             return jsonArray;
@@ -223,51 +254,6 @@ public class SwipeMusic extends android.support.v4.app.Fragment {
             //finalResult.setText(text[0]);
 
         }
-    }
-
-
-
-    public static boolean isInternetAvailable() {
-        try {
-            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
-            return !ipAddr.equals("");
-
-        } catch (Exception e) {
-            return false;
-        }
-
-    }
-
-    public static JSONArray getJSONObjectFromURL(String urlString) throws IOException, JSONException {
-
-        String jsonString="";
-        if(isInternetAvailable()) {
-            URL url = new URL(urlString);
-            URLConnection urlConn = url.openConnection();
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-            int responseCode = connection.getResponseCode();
-            InputStream in;
-            if(responseCode == 200) {
-                // response code is OK
-                in = connection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(in,"utf-8"),8);
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                in.close();
-                jsonString = sb.toString();
-            }else{
-                // response code is not OK
-            }
-            connection.disconnect();
-        }
-        JSONArray jsonArray = new JSONArray(jsonString);
-
-        return (jsonArray);
     }
 
 }

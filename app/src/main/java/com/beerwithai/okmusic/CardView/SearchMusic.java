@@ -1,27 +1,18 @@
-package com.beerwithai.newscatcher.CardView;
+package com.beerwithai.okmusic.CardView;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.beerwithai.newscatcher.R;
-
-import org.w3c.dom.Text;
+import com.beerwithai.okmusic.R;
 
 import java.net.URL;
 
@@ -38,7 +29,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if(view == null)
+        if (view == null)
             view = inflater.inflate(R.layout.content_search_music, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
@@ -71,24 +62,6 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         private URL[] urls;
 
 
-        // Provide a reference to the views for each data item
-        // Complex data items may need more than one view per item, and
-        // you provide access to all the views for a data item in a view holder
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            // each data item is just a string in this case
-            public TextView artist, title;
-            public ImageView cover;
-            public LinearLayout layout;
-
-            public ViewHolder(View v) {
-                super(v);
-                artist = (TextView) v.findViewById(R.id.artists_rec);
-                title = (TextView) v.findViewById(R.id.title_rec);
-                cover = (ImageView) v.findViewById(R.id.coverImageSmall);
-                layout = (LinearLayout) v.findViewById(R.id.chummaoruid);
-            }
-        }
-
         // Provide a suitable constructor (depends on the kind of dataset)
         public SongsAdapter(Bitmap[] coverImages, String[] titles, String[] artists, URL[] urls) {
             this.coverImages = coverImages;
@@ -100,13 +73,12 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            android.support.v7.widget.CardView view = (android.support.v7.widget.CardView)LayoutInflater.from(parent.getContext()).inflate(R.layout.content_list_song, parent, false);
+            android.support.v7.widget.CardView view = (android.support.v7.widget.CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.content_list_song, parent, false);
 
             ViewHolder viewHolder = new ViewHolder(view);
 
             return viewHolder;
         }
-
 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
@@ -120,7 +92,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             holder.title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(SwipeMusic.musicPlaying)
+                    if (SwipeMusic.musicPlaying)
                         SwipeMusic.mp.stop();
                     else {
                         try {
@@ -140,7 +112,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             holder.artist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(SwipeMusic.musicPlaying)
+                    if (SwipeMusic.musicPlaying)
                         SwipeMusic.mp.stop();
                     else {
                         try {
@@ -160,7 +132,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             holder.cover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(SwipeMusic.musicPlaying)
+                    if (SwipeMusic.musicPlaying)
                         SwipeMusic.mp.stop();
                     else {
                         try {
@@ -182,6 +154,24 @@ public class SearchMusic extends android.support.v4.app.Fragment {
         @Override
         public int getItemCount() {
             return titles.length;
+        }
+
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public TextView artist, title;
+            public ImageView cover;
+            public LinearLayout layout;
+
+            public ViewHolder(View v) {
+                super(v);
+                artist = (TextView) v.findViewById(R.id.artists_rec);
+                title = (TextView) v.findViewById(R.id.title_rec);
+                cover = (ImageView) v.findViewById(R.id.coverImageSmall);
+                layout = (LinearLayout) v.findViewById(R.id.chummaoruid);
+            }
         }
     }
 

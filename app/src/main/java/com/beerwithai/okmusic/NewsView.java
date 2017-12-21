@@ -1,30 +1,24 @@
-package com.beerwithai.newscatcher;
+package com.beerwithai.okmusic;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
-
-import com.beerwithai.newscatcher.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-public class NewsView extends Activity
-{
-    private WebView mWebView = null;
+
+public class NewsView extends Activity {
     public static boolean active = false;
-    /** Called when the activity is first created. */
+    private WebView mWebView = null;
+
+    /**
+     * Called when the activity is first created.
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_view);
 
@@ -39,6 +33,16 @@ public class NewsView extends Activity
 
     }
 
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    public void onStop() {
+        super.onStop();
+        active = false;
+    }
+
     private class CheckForInternet extends AsyncTask<String, String, Integer> {
         @Override
         protected Integer doInBackground(String... params) {
@@ -48,24 +52,14 @@ public class NewsView extends Activity
                 HttpGet httpRequest = new HttpGet(params[0]);
 
                 HttpResponse httpResponse = httpClient.execute(httpRequest);
-                 iHTTPStatus = httpResponse.getStatusLine().getStatusCode();
+                iHTTPStatus = httpResponse.getStatusLine().getStatusCode();
             } catch (Exception e) {
                 return 0;
             }
-            if(iHTTPStatus == 200)
+            if (iHTTPStatus == 200)
                 return 1;
             return 0;
         }
-    }
-
-    public void onStart(){
-        super.onStart();
-        active = true;
-    }
-
-    public void onStop() {
-        super.onStop();
-        active = false;
     }
 
 }

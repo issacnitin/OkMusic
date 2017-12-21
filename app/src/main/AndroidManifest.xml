@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.beerwithai.newscatcher">
+    package="com.beerwithai.okmusic">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewsView" />
+        <activity android:name="com.beerwithai.okmusic.NewsView" />
         <activity
-            android:name=".NavigationActivity"
+            android:name="com.beerwithai.okmusic.NavigationActivity"
             android:label="@string/title_activity_navigation"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,11 +25,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FavoriteNews"
+            android:name="com.beerwithai.okmusic.FavoriteNews"
             android:label="@string/title_activity_favorite_news"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CardView.SearchMusic"
+            android:name="com.beerwithai.okmusic.CardView.SearchMusic"
             android:label="@string/title_activity_search_music"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

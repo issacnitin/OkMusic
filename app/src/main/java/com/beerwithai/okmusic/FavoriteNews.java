@@ -1,34 +1,22 @@
-package com.beerwithai.newscatcher;
+package com.beerwithai.okmusic;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.beerwithai.newscatcher.CardView.SearchMusic;
-import com.beerwithai.newscatcher.CardView.SwipeMusic;
+import com.beerwithai.okmusic.CardView.SearchMusic;
+import com.beerwithai.okmusic.CardView.SwipeMusic;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-import static com.beerwithai.newscatcher.R.id.nav_view;
 
 public class FavoriteNews extends android.support.v4.app.Fragment {
 
@@ -42,7 +30,7 @@ public class FavoriteNews extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(view == null)
+        if (view == null)
             view = inflater.inflate(R.layout.content_favorite_news, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_fav);
@@ -66,9 +54,9 @@ public class FavoriteNews extends android.support.v4.app.Fragment {
         SharedPreferences.Editor editor = settings.edit();
 
         // Reading from SharedPreferences
-        Map<String,?> keys = settings.getAll();
+        Map<String, ?> keys = settings.getAll();
 
-        for(Map.Entry<String,?> entry : keys.entrySet()){
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
             titles.add(SwipeMusic.titleStringArray[Integer.valueOf(entry.getKey())]);
             covers.add(SwipeMusic.coverImageArray[Integer.valueOf(entry.getKey())]);
             urls.add(SwipeMusic.urlStringArray[Integer.valueOf(entry.getKey())]);
@@ -80,7 +68,7 @@ public class FavoriteNews extends android.support.v4.app.Fragment {
         String[] artistsArr = artists.toArray(new String[artists.size()]);
         Bitmap[] bmpArr = covers.toArray(new Bitmap[covers.size()]);
 
-        final SearchMusic.SongsAdapter arrayAdapter = new SearchMusic.SongsAdapter(bmpArr,  titlesArr, artistsArr, urlArr);
+        final SearchMusic.SongsAdapter arrayAdapter = new SearchMusic.SongsAdapter(bmpArr, titlesArr, artistsArr, urlArr);
         mRecyclerView.setAdapter(arrayAdapter);
 
         return view;

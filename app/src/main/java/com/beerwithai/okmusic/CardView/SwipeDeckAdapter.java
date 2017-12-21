@@ -1,24 +1,16 @@
-package com.beerwithai.newscatcher;
+package com.beerwithai.okmusic.CardView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.beerwithai.newscatcher.NewsView;
-import com.beerwithai.newscatcher.R;
-
-import org.w3c.dom.Text;
+import com.beerwithai.okmusic.R;
 
 import java.net.URL;
 
@@ -29,7 +21,7 @@ public class SwipeDeckAdapter extends BaseAdapter {
     private String[] titles, artists;
     private Context context;
 
-    public SwipeDeckAdapter(String[] titles, String[] artists, Bitmap[] data, URL[] urls,Context context) {
+    public SwipeDeckAdapter(String[] titles, String[] artists, Bitmap[] data, URL[] urls, Context context) {
         this.data = data;
         this.urls = urls;
         this.context = context;
@@ -62,7 +54,7 @@ public class SwipeDeckAdapter extends BaseAdapter {
             v = inflater.inflate(R.layout.cardview, parent, false);
         }
         ImageView coverImage = (ImageView) v.findViewById(R.id.card_image);
-        Bitmap item = (Bitmap)getItem(position);
+        Bitmap item = (Bitmap) getItem(position);
         coverImage.setImageBitmap(item);
         TextView musicTitle = (TextView) v.findViewById(R.id.sample_text);
         String title = titles[position];
