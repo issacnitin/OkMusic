@@ -30,8 +30,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/fab_margin"
-            swipedeck:backgroundTint="@color/colorPrimary"
-            swipedeck:srcCompat="@drawable/icons8_circled_play_50" />
+            swipedeck:backgroundTint="@android:color/holo_orange_light"
+            swipedeck:srcCompat="@drawable/play" />
 
 
         <com.daprlabs.aaron.swipedeck.SwipeDeck

@@ -4,13 +4,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/swip_music"
-            android:title="Swipe Music" />
+            android:title="Swipe Music"
+            android:icon="@drawable/swipe"/>
         <item
             android:id="@+id/search_music"
-            android:title="Search" />
+            android:title="Search"
+            android:icon="@drawable/magnifier"/>
         <item
             android:id="@+id/favorite_music"
-            android:title="Favorites" />
+            android:title="Playlist"
+            android:icon="@drawable/star"/>
     </group>
 
 </menu>

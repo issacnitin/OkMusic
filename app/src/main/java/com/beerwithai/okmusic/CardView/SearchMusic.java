@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -89,7 +90,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             holder.artist.setText(artists[position]);
             holder.cover.setImageBitmap(coverImages[position]);
 
-            holder.title.setOnClickListener(new View.OnClickListener() {
+            holder.playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (SwipeMusic.musicPlaying)
@@ -109,45 +110,6 @@ public class SearchMusic extends android.support.v4.app.Fragment {
                 }
             });
 
-            holder.artist.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (SwipeMusic.musicPlaying)
-                        SwipeMusic.mp.stop();
-                    else {
-                        try {
-                            String dataSource = urls[position].toString();
-                            SwipeMusic.mp.setDataSource(dataSource);
-                            SwipeMusic.mp.prepare();
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        SwipeMusic.mp.start();
-                    }
-
-                    SwipeMusic.musicPlaying = !SwipeMusic.musicPlaying;
-                }
-            });
-
-            holder.cover.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (SwipeMusic.musicPlaying)
-                        SwipeMusic.mp.stop();
-                    else {
-                        try {
-                            String dataSource = urls[position].toString();
-                            SwipeMusic.mp.setDataSource(dataSource);
-                            SwipeMusic.mp.prepare();
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        SwipeMusic.mp.start();
-                    }
-
-                    SwipeMusic.musicPlaying = !SwipeMusic.musicPlaying;
-                }
-            });
         }
 
         // Return the size of your dataset (invoked by the layout manager)
@@ -164,6 +126,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
             public TextView artist, title;
             public ImageView cover;
             public LinearLayout layout;
+            public ImageButton playButton;
 
             public ViewHolder(View v) {
                 super(v);
@@ -171,6 +134,7 @@ public class SearchMusic extends android.support.v4.app.Fragment {
                 title = (TextView) v.findViewById(R.id.title_rec);
                 cover = (ImageView) v.findViewById(R.id.coverImageSmall);
                 layout = (LinearLayout) v.findViewById(R.id.chummaoruid);
+                playButton = (ImageButton) v.findViewById(R.id.playButton);
             }
         }
     }
