@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -64,15 +65,18 @@ public class SwipeDeckAdapter extends BaseAdapter {
         String artists_ = artists[position];
         artist.setText(artists_);
 
-        v.setOnClickListener(new View.OnClickListener() {
+
+        /*v.setOnGenericMotionListener(new View.OnGenericMotionListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onGenericMotion(View v, MotionEvent event) {
                 SharedPreferences sharedPref = context.getSharedPreferences("favorite_music", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(titles[position], urls[position].toString());
+                editor.putLong(String.valueOf(position), position);
                 editor.commit();
+                return false;
             }
         });
+        */
 
         return v;
     }
