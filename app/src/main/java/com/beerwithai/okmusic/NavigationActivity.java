@@ -1,5 +1,7 @@
 package com.beerwithai.okmusic;
 
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.beerwithai.okmusic.CardView.SearchMusic;
 import com.beerwithai.okmusic.CardView.SwipeMusic;
@@ -27,6 +31,7 @@ public class NavigationActivity extends AppCompatActivity
             @Override
             public void run() {
                 try {
+
                     android.support.v4.app.Fragment mFragment = null;
                     mFragment = new SplashScreen();
                     android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -36,11 +41,16 @@ public class NavigationActivity extends AppCompatActivity
                 } catch (Exception e) {
 
                 } finally {
-                    android.support.v4.app.Fragment mFragment = null;
-                    mFragment = new SwipeMusic();
-                    android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.frameLayout, mFragment).commit();
+                    if(SwipeMusic.isInternetAvailable()) {
+                        android.support.v4.app.Fragment mFragment = null;
+                        mFragment = new SwipeMusic();
+                        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frameLayout, mFragment).commit();
+                    } else {
+                        ImageView internet = (ImageView) findViewById(R.id.waiticon);
+                        internet.setImageDrawable(getResources().getDrawable(R.drawable.no_internet));
+                    }
                 }
             }
         };

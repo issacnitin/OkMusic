@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.beerwithai.okmusic.CardView.SwipeMusic;
 
 /**
  * Created by nitinissacjoy on 21/12/17.
@@ -18,7 +21,7 @@ public class SplashScreen extends Fragment {
                              Bundle savedInstanceState) {
 
         if (view == null)
-            view = inflater.inflate(R.layout.activity_favorite_news, container, false);
+            view = inflater.inflate(R.layout.splash_screen, container, false);
 
         return view;
     }
